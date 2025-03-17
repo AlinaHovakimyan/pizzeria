@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pizzeria - Menu</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Additional styling for the menu page */
+    body {
+      font-family: "Georgia", serif;
+      background-color: #fdfdfd;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+    main {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 0 20px;
+    }
+    h2 {
+      margin-top: 0;
+      color: #c0392b;
+    }
+    /* Header row for price columns */
+    .menu-header {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 2px solid #333;
+      margin-bottom: 10px;
+      padding-bottom: 5px;
+    }
+    .menu-header-left {
+      width: 50%;
+    }
+    .menu-header-right {
+      display: flex;
+      gap: 40px;
+    }
+    .menu-header-right div {
+      font-weight: bold;
+      white-space: nowrap;
+    }
+    /* Each menu item */
+    .menu-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .menu-item .left {
+      width: 50%;
+    }
+    .item-title {
+      font-weight: bold;
+      font-size: 1.2em;
+      margin-bottom: 5px;
+    }
+    .item-number {
+      margin-right: 8px;
+    }
+    .item-desc {
+      font-size: 0.95em;
+      color: #555;
+    }
+    .menu-item .right {
+      display: flex;
+      gap: 40px;
+      white-space: nowrap;
+    }
+    .price-col {
+      text-align: right;
+      min-width: 80px;
+    }
+    /* Back Button */
+    .back-button {
+      margin-top: 30px;
+      display: block;
+      text-align: center;
+    }
+    .back-button a {
+      text-decoration: none;
+      background-color: #c0392b;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+    .back-button a:hover {
+      background-color: #a93226;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>MENU</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="reservation.html">Reservation</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </header>
+  <main>
+    <h2>Unsere Pizzen</h2>
+    <p>Frisch zubereitet mit besten Zutaten</p>
+    
+    <!-- Header row for price columns -->
+    <div class="menu-header">
+      <div class="menu-header-left"></div>
+      <div class="menu-header-right">
+        <div>Mittel 30cm</div>
+        <div>Party 40x60cm</div>
+      </div>
+    </div>
+
+    <!-- Dynamic Menu Items will load here -->
+    <div id="menu-content"></div>
+    
+    <!-- Back to Home Button -->
+    <div class="back-button">
+      <a href="index.html">Back to Home</a>
+    </div>
+  </main>
+  
+  <script>
+    // Fetch the menu data from the text file
+    fetch('/resources/pizza_menu.txt')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.text();
+      })
+      .then(text => {
+        // Split into lines and remove empty lines
+        const lines = text.split('\n').filter(line => line.trim() !== '');
+        console.log("All lines:", lines);
+        
+        // Verify we have an even number of lines (each pizza: 2 lines)
+        if (lines.length % 2 !== 0) {
+          console.warn("The menu file format is off. Each pizza should have 2 lines.");
+        }
+        
+        let htmlContent = '';
+        let itemNumber = 1;
+        
+        // Process two lines at a time: first line for name & prices, second for description.
+        for (let i = 0; i < lines.length; i += 2) {
+          const firstLine = lines[i].trim();
+          const description = lines[i + 1] ? lines[i + 1].trim() : '';
+          
+          // Split first line by spaces
+          const tokens = firstLine.split(' ').filter(token => token.trim() !== '');
+          if (tokens.length < 3) {
+            console.warn("Skipping line due to insufficient tokens:", firstLine);
+            continue;
+          }
+          
+          // Assume last two tokens are prices
+          const priceParty = tokens.pop();  // last token
+          const priceMittel = tokens.pop(); // second last token
+          const name = tokens.join(' ');
+          
+          htmlContent += `
+            <div class="menu-item">
+              <div class="left">
+                <div class="item-title">
+                  <span class="item-number">${itemNumber}</span>${name}
+                </div>
+                <div class="item-desc">${description}</div>
+              </div>
+              <div class="right">
+                <div class="price-col">${priceMittel}</div>
+                <div class="price-col">${priceParty}</div>
+              </div>
+            </div>
+          `;
+          itemNumber++;
+        }
+        
+        document.getElementById('menu-content').innerHTML = htmlContent;
+      })
+      .catch(error => {
+        console.error('Error loading menu:', error);
+        document.getElementById('menu-content').innerHTML = 
+          '<p>Sorry, wir konnten das Menü nicht laden.</p>';
+      });
+  </script>
+</body>
+</html>

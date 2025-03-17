@@ -1,0 +1,29 @@
+Mozzarella Fior di Latte : 2,00
+Büffelkäse : 2,50 
+Gorgonzola 2,50
+Caprese 2,00
+Pecorino Romano Käse 2,50
+Grana 2,00
+Parmigiano-Scheiben 2,00
+Trüffelöl 2,00
+Thunfisch 2,00
+Mais 1,00
+Oliven6 1,00
+Steinpilze 2,50
+Frische Champignons 1,50
+Sardellen 1,50
+
+Artischocken : 1,50
+Spinat 1,50 
+Zwiebeln 0,50
+Zucchini 1,00
+Auberginen 1,00
+Paprika 1,00
+Ei 1,00
+Frutti di Mare 3,00
+Lachs 3,00
+Garnelen 2,50
+Hinterschinken1,3,4 2,50
+Parmaschinken1,3,4 3,00
+Salami1,3 2,00
+Scharfe Salami1,3 2,50
