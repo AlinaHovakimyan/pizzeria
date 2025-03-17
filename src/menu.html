@@ -6,8 +6,42 @@
   <title>Pizzeria - Menu</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    /* Additional styling for the menu page */
-    body {
+    .menu-intro {
+      position: relative;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    @keyframes slideInLeft {
+        from {
+            transform: translateX(-150%) translateY(-50%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0) translateY(-50%);
+            opacity: 1;
+        }
+    }
+
+    .pizza-image {
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateX(0) translateY(-50%);
+        width: 120px;
+        height: auto;
+        border-radius: 10px;
+
+        /* Animation styles */
+        animation: slideInLeft 1s ease-out;
+    }
+
+
+
+    .menu-intro div {
+      margin-left: 140px; /* Shift text to avoid overlapping image */
+    }
+      body {
       font-family: "Georgia", serif;
       background-color: #fdfdfd;
       color: #333;
@@ -101,9 +135,14 @@
     </nav>
   </header>
   <main>
-    <h2>Unsere Pizzen</h2>
-    <p>Frisch zubereitet mit besten Zutaten</p>
-    
+    <div class="menu-intro">
+      <img src="/resources/pizza_1.jpg" alt="Pizza" class="pizza-image">
+      <div>
+        <h2>Unsere Pizzen</h2>
+        <p>Frisch zubereitet mit besten Zutaten</p>
+      </div>
+    </div>
+
     <!-- Header row for price columns -->
     <div class="menu-header">
       <div class="menu-header-left"></div>
@@ -115,13 +154,13 @@
 
     <!-- Dynamic Menu Items will load here -->
     <div id="menu-content"></div>
-    
+
     <!-- Back to Home Button -->
     <div class="back-button">
       <a href="index.html">Back to Home</a>
     </div>
   </main>
-  
+
   <script>
     // Fetch the menu data from the text file
     fetch('/resources/pizza_menu.txt')
@@ -135,32 +174,32 @@
         // Split into lines and remove empty lines
         const lines = text.split('\n').filter(line => line.trim() !== '');
         console.log("All lines:", lines);
-        
+
         // Verify we have an even number of lines (each pizza: 2 lines)
         if (lines.length % 2 !== 0) {
           console.warn("The menu file format is off. Each pizza should have 2 lines.");
         }
-        
+
         let htmlContent = '';
         let itemNumber = 1;
-        
+
         // Process two lines at a time: first line for name & prices, second for description.
         for (let i = 0; i < lines.length; i += 2) {
           const firstLine = lines[i].trim();
           const description = lines[i + 1] ? lines[i + 1].trim() : '';
-          
+
           // Split first line by spaces
           const tokens = firstLine.split(' ').filter(token => token.trim() !== '');
           if (tokens.length < 3) {
             console.warn("Skipping line due to insufficient tokens:", firstLine);
             continue;
           }
-          
+
           // Assume last two tokens are prices
           const priceParty = tokens.pop();  // last token
           const priceMittel = tokens.pop(); // second last token
           const name = tokens.join(' ');
-          
+
           htmlContent += `
             <div class="menu-item">
               <div class="left">
@@ -177,12 +216,12 @@
           `;
           itemNumber++;
         }
-        
+
         document.getElementById('menu-content').innerHTML = htmlContent;
       })
       .catch(error => {
         console.error('Error loading menu:', error);
-        document.getElementById('menu-content').innerHTML = 
+        document.getElementById('menu-content').innerHTML =
           '<p>Sorry, wir konnten das Menü nicht laden.</p>';
       });
   </script>
