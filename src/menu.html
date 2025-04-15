@@ -36,6 +36,27 @@
         animation: slideInLeft 1s ease-out;
     }
 
+    .menu-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+    }
+
+    .menu-col {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .label {
+        font-weight: bold;
+        font-size: 1.1em;
+    }
+
+    .value {
+        font-size: 0.95em;
+        color: gray;
+    }
 
 
     .menu-intro div {
@@ -57,21 +78,17 @@
       margin-top: 0;
       color: #c0392b;
     }
-    /* Header row for price columns */
-    .menu-header {
-      display: flex;
-      justify-content: space-between;
-      border-bottom: 2px solid #333;
-      margin-bottom: 10px;
-      padding-bottom: 5px;
-    }
+    
     .menu-header-left {
       width: 50%;
     }
+
     .menu-header-right {
-      display: flex;
-      gap: 40px;
+        display: flex;
+        gap: 40px;
+        white-space: nowrap;
     }
+
     .menu-header-right div {
       font-weight: bold;
       white-space: nowrap;
@@ -106,6 +123,19 @@
       text-align: right;
       min-width: 80px;
     }
+
+.menu-header-right .price-col {
+  text-align: right;
+  min-width: 80px;
+  font-weight: bold;
+}
+
+.menu-header-right .sub {
+  font-weight: normal;
+  font-size: 0.9em;
+  color: gray;
+}
+
     /* Back Button */
     .back-button {
       margin-top: 30px;
@@ -144,13 +174,24 @@
     </div>
 
     <!-- Header row for price columns -->
-    <div class="menu-header">
-      <div class="menu-header-left"></div>
-      <div class="menu-header-right">
-        <div>Mittel 30cm</div>
-        <div>Party 40x60cm</div>
+    <!--<div class="menu-header">
+      <div class="menu-col">
+        <div class="label">Mittel</div>
+        <div class="value">30 cm</div>
       </div>
-    </div>
+      <div class="menu-col">
+        <div class="label">Party</div>
+        <div class="value">40x60 cm</div>
+      </div>
+    </div>-->
+
+<div class="menu-header">
+  <div class="menu-header-left"></div> <!-- empty, like .left in menu-item -->
+  <div class="menu-header-right">
+    <div class="price-col">Mittel<br><span class="sub">30 cm</span></div>
+    <div class="price-col">Party<br><span class="sub">40x60 cm</span></div>
+  </div>
+</div>
 
     <!-- Dynamic Menu Items will load here -->
     <div id="menu-content"></div>
