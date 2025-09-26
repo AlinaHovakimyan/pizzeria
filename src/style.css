@@ -5,7 +5,7 @@ body {
     text-align: center;
 }
 header {
-    background-image: url('/resources/pizzeria_header_smaller.jpg');
+    background-image: url('../resources/pizzeria_header_smaller.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;

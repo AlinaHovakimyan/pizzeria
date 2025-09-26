@@ -10,15 +10,17 @@
       position: relative;
       text-align: center;
       margin-bottom: 20px;
+      padding-top: 20px;
+      min-height: 120px;
     }
 
     @keyframes slideInLeft {
         from {
-            transform: translateX(-150%) translateY(-50%);
+            transform: translateX(-150%);
             opacity: 0;
         }
         to {
-            transform: translateX(0) translateY(-50%);
+            transform: translateX(0);
             opacity: 1;
         }
     }
@@ -26,11 +28,12 @@
     .pizza-image {
         position: absolute;
         left: 0;
-        top: 50%;
-        transform: translateX(0) translateY(-50%);
+        top: 20px;
+        transform: translateX(0);
         width: 120px;
         height: auto;
         border-radius: 10px;
+        z-index: 10;
 
         /* Animation styles */
         animation: slideInLeft 1s ease-out;
@@ -61,6 +64,36 @@
 
     .menu-intro div {
       margin-left: 140px; /* Shift text to avoid overlapping image */
+    }
+    
+    /* Responsive design */
+    @media (max-width: 768px) {
+      .pizza-image {
+        position: static;
+        transform: none;
+        width: 100px;
+        margin-bottom: 10px;
+      }
+      
+      .menu-intro {
+        text-align: center;
+      }
+      
+      .menu-intro div {
+        margin-left: 0;
+      }
+      
+      .menu-header-right {
+        gap: 20px;
+      }
+      
+      .menu-item .right {
+        gap: 20px;
+      }
+      
+      main {
+        padding: 0 10px;
+      }
     }
       body {
       font-family: "Georgia", serif;
@@ -153,6 +186,26 @@
     .back-button a:hover {
       background-color: #a93226;
     }
+    
+    /* Enhanced styling */
+    .menu-item {
+      border-bottom: 1px solid #eee;
+      padding: 15px 0;
+      transition: background-color 0.3s ease;
+    }
+    
+    .menu-item:hover {
+      background-color: #f9f9f9;
+    }
+    
+    .item-title {
+      color: #c0392b;
+    }
+    
+    .price-col {
+      font-weight: bold;
+      color: #2c3e50;
+    }
   </style>
 </head>
 <body>
@@ -160,13 +213,12 @@
     <h1>MENU</h1>
     <nav>
       <a href="../index.html">Home</a>
-      <a href="reservation.html">Reservation</a>
       <a href="contact.html">Contact</a>
     </nav>
   </header>
   <main>
     <div class="menu-intro">
-      <img src="/resources/pizza_1.jpg" alt="Pizza" class="pizza-image">
+      <img src="../resources/pizza_1.jpg" alt="Pizza" class="pizza-image">
       <div>
         <h2>Unsere Pizzen</h2>
         <p>Frisch zubereitet mit besten Zutaten</p>
@@ -196,6 +248,27 @@
     <!-- Dynamic Menu Items will load here -->
     <div id="menu-content"></div>
 
+    <!-- Other Items Section -->
+    <div class="menu-intro" style="margin-top: 40px;">
+      <img src="../resources/coffe.png" alt="Coffee" class="pizza-image">
+      <div>
+        <h2>Weitere Angebote</h2>
+        <p>Zusätzliche Leckereien</p>
+      </div>
+    </div>
+
+    <div id="other-menu-content"></div>
+
+    <!-- Supplements Section -->
+    <div class="menu-intro" style="margin-top: 40px;">
+      <div>
+        <h2>Zusätze</h2>
+        <p>Erweitern Sie Ihre Pizza</p>
+      </div>
+    </div>
+
+    <div id="supplements-menu-content"></div>
+
     <!-- Back to Home Button -->
     <div class="back-button">
       <a href="../index.html">Back to Home</a>
@@ -204,7 +277,7 @@
 
   <script>
     // Fetch the menu data from the text file
-    fetch('/resources/pizza_menu.txt')
+    fetch('../resources/pizza_menu.txt')
       .then(response => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -222,7 +295,6 @@
         }
 
         let htmlContent = '';
-        let itemNumber = 1;
 
         // Process two lines at a time: first line for name & prices, second for description.
         for (let i = 0; i < lines.length; i += 2) {
@@ -245,7 +317,7 @@
             <div class="menu-item">
               <div class="left">
                 <div class="item-title">
-                  <span class="item-number">${itemNumber}</span>${name}
+                  ${name}
                 </div>
                 <div class="item-desc">${description}</div>
               </div>
@@ -255,7 +327,6 @@
               </div>
             </div>
           `;
-          itemNumber++;
         }
 
         document.getElementById('menu-content').innerHTML = htmlContent;
@@ -264,6 +335,106 @@
         console.error('Error loading menu:', error);
         document.getElementById('menu-content').innerHTML =
           '<p>Sorry, wir konnten das Menü nicht laden.</p>';
+      });
+
+    // Load other menu items
+    fetch('../resources/other_menu.txt')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.text();
+      })
+      .then(text => {
+        const lines = text.split('\n').filter(line => line.trim() !== '');
+        let htmlContent = '';
+
+        lines.forEach(line => {
+          // Trim the line to remove any trailing spaces
+          line = line.trim();
+          
+          const parts = line.split(' ').filter(part => part.trim() !== '');
+          if (parts.length >= 2) {
+            const price = parts.pop().trim();
+            const name = parts.join(' ').trim();
+            htmlContent += `
+              <div class="menu-item">
+                <div class="left">
+                  <div class="item-title">${name}</div>
+                </div>
+                <div class="right">
+                  <div class="price-col">${price}</div>
+                </div>
+              </div>
+            `;
+          }
+        });
+
+        document.getElementById('other-menu-content').innerHTML = htmlContent;
+      })
+      .catch(error => {
+        console.error('Error loading other menu:', error);
+        document.getElementById('other-menu-content').innerHTML =
+          '<p>Sorry, wir konnten die weiteren Angebote nicht laden.</p>';
+      });
+
+    // Load supplements menu
+    fetch('../resources/supplements_menu.txt')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.text();
+      })
+      .then(text => {
+        const lines = text.split('\n').filter(line => line.trim() !== '');
+        let htmlContent = '';
+
+        lines.forEach(line => {
+          // Trim the line to remove any trailing spaces
+          line = line.trim();
+          
+          // Handle lines with colon separator (e.g., "Büffelkäse : 2,50")
+          if (line.includes(':')) {
+            const colonIndex = line.indexOf(':');
+            const name = line.substring(0, colonIndex).trim();
+            const price = line.substring(colonIndex + 1).trim();
+            htmlContent += `
+              <div class="menu-item">
+                <div class="left">
+                  <div class="item-title">${name}</div>
+                </div>
+                <div class="right">
+                  <div class="price-col">${price}</div>
+                </div>
+              </div>
+            `;
+          } else {
+            // Handle lines without colon (e.g., "Gorgonzola 2,50")
+            const parts = line.split(' ').filter(part => part.trim() !== '');
+            if (parts.length >= 2) {
+              const price = parts.pop().trim();
+              const name = parts.join(' ').trim();
+              htmlContent += `
+                <div class="menu-item">
+                  <div class="left">
+                    <div class="item-title">${name}</div>
+                  </div>
+                  <div class="right">
+                    <div class="price-col">${price}</div>
+                  </div>
+                </div>
+              `;
+            }
+          }
+        });
+
+        document.getElementById('supplements-menu-content').innerHTML = htmlContent;
+      })
+      .catch(error => {
+        console.error('Error loading supplements menu:', error);
+        document.getElementById('supplements-menu-content').innerHTML =
+          '<p>Sorry, wir konnten die Zusätze nicht laden.</p>';
       });
   </script>
 </body>
