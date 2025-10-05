@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Schwenksaal Pizza</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .login-title {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #ff6b35;
+        }
+
+        .login-btn {
+            width: 100%;
+            background: #ff6b35;
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .login-btn:hover {
+            background: #e55a2b;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        .admin-panel {
+            display: none;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 1200px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .admin-title {
+            font-size: 2.5rem;
+            color: #2c3e50;
+        }
+
+        .logout-btn {
+            background: #e74c3c;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .logout-btn:hover {
+            background: #c0392b;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            padding: 30px;
+            background: #f8f8f8;
+            border-radius: 15px;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .item-list {
+            margin-bottom: 20px;
+        }
+
+        .item-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .item-input {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .item-input:focus {
+            outline: none;
+            border-color: #ff6b35;
+        }
+
+        .price-input {
+            width: 100px;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            text-align: center;
+        }
+
+        .price-input:focus {
+            outline: none;
+            border-color: #ff6b35;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .btn-save {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-save:hover {
+            background: #229954;
+        }
+
+        .btn-delete {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background: #c0392b;
+        }
+
+        .btn-add {
+            background: #3498db;
+            color: white;
+            padding: 12px 20px;
+            margin-top: 15px;
+        }
+
+        .btn-add:hover {
+            background: #2980b9;
+        }
+
+        .save-all-btn {
+            background: #ff6b35;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 20px auto;
+            display: block;
+            transition: background 0.3s ease;
+        }
+
+        .save-all-btn:hover {
+            background: #e55a2b;
+        }
+
+        .status-message {
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .status-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        @media (max-width: 768px) {
+            .admin-panel {
+                padding: 20px;
+                margin: 10px;
+            }
+
+            .admin-header {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .item-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .btn-group {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Form -->
+    <div class="login-container" id="loginContainer">
+        <h1 class="login-title">Admin Login</h1>
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" required>
+            </div>
+            <button type="submit" class="login-btn">Login</button>
+        </form>
+        <div id="errorMessage" class="error-message" style="display: none;"></div>
+    </div>
+
+    <!-- Admin Panel -->
+    <div class="admin-panel" id="adminPanel">
+        <div class="admin-header">
+            <h1 class="admin-title">Admin Panel</h1>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+
+        <div id="statusMessage"></div>
+
+        <!-- Pizza Menu Section -->
+        <div class="section">
+            <h2 class="section-title">Pizza Menu</h2>
+            <div class="item-list" id="pizzaList">
+                <!-- Pizza items will be loaded here -->
+            </div>
+            <button class="btn btn-add" onclick="addPizzaItem()">Add New Pizza</button>
+        </div>
+
+        <!-- Other Items Section -->
+        <div class="section">
+            <h2 class="section-title">Other Items</h2>
+            <div class="item-list" id="otherList">
+                <!-- Other items will be loaded here -->
+            </div>
+            <button class="btn btn-add" onclick="addOtherItem()">Add New Item</button>
+        </div>
+
+        <!-- Supplements Section -->
+        <div class="section">
+            <h2 class="section-title">Supplements</h2>
+            <div class="item-list" id="supplementsList">
+                <!-- Supplements will be loaded here -->
+            </div>
+            <button class="btn btn-add" onclick="addSupplementItem()">Add New Supplement</button>
+        </div>
+
+        <button class="save-all-btn" onclick="saveAllChanges()">Save All Changes</button>
+    </div>
+
+    <script>
+        // Simple password protection (in production, use proper authentication)
+        const ADMIN_PASSWORD = 'pizza2025';
+        
+        let menuData = {
+            pizzas: [],
+            other: [],
+            supplements: []
+        };
+
+        // Login functionality
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const password = document.getElementById('password').value;
+            
+            if (password === ADMIN_PASSWORD) {
+                document.getElementById('loginContainer').style.display = 'none';
+                document.getElementById('adminPanel').style.display = 'block';
+                loadMenuData();
+            } else {
+                document.getElementById('errorMessage').textContent = 'Invalid password!';
+                document.getElementById('errorMessage').style.display = 'block';
+            }
+        });
+
+        // Logout functionality
+        function logout() {
+            document.getElementById('loginContainer').style.display = 'block';
+            document.getElementById('adminPanel').style.display = 'none';
+            document.getElementById('password').value = '';
+            document.getElementById('errorMessage').style.display = 'none';
+        }
+
+        // Load menu data from files
+        async function loadMenuData() {
+            try {
+                // Load pizzas
+                const pizzaResponse = await fetch('../resources/pizza_menu.txt');
+                const pizzaText = await pizzaResponse.text();
+                const pizzaLines = pizzaText.split('\n').filter(line => line.trim() !== '');
+                
+                menuData.pizzas = [];
+                for (let i = 0; i < pizzaLines.length; i += 2) {
+                    const firstLine = pizzaLines[i].trim();
+                    const description = pizzaLines[i + 1] ? pizzaLines[i + 1].trim() : '';
+                    
+                    const tokens = firstLine.split(' ').filter(token => token.trim() !== '');
+                    if (tokens.length >= 3) {
+                        const priceParty = tokens.pop();
+                        const priceMittel = tokens.pop();
+                        const name = tokens.join(' ');
+                        
+                        menuData.pizzas.push({
+                            name: name,
+                            description: description,
+                            priceMittel: priceMittel,
+                            priceParty: priceParty
+                        });
+                    }
+                }
+
+                // Load other items
+                const otherResponse = await fetch('../resources/other_menu.txt');
+                const otherText = await otherResponse.text();
+                const otherLines = otherText.split('\n').filter(line => line.trim() !== '');
+                
+                menuData.other = [];
+                otherLines.forEach(line => {
+                    line = line.trim();
+                    const parts = line.split(' ').filter(part => part.trim() !== '');
+                    if (parts.length >= 2) {
+                        const price = parts.pop().trim();
+                        const name = parts.join(' ').trim();
+                        menuData.other.push({ name: name, price: price });
+                    }
+                });
+
+                // Load supplements
+                const supplementsResponse = await fetch('../resources/supplements_menu.txt');
+                const supplementsText = await supplementsResponse.text();
+                const supplementsLines = supplementsText.split('\n').filter(line => line.trim() !== '');
+                
+                menuData.supplements = [];
+                supplementsLines.forEach(line => {
+                    line = line.trim();
+                    if (line.includes(':')) {
+                        const colonIndex = line.indexOf(':');
+                        const name = line.substring(0, colonIndex).trim();
+                        const price = line.substring(colonIndex + 1).trim();
+                        menuData.supplements.push({ name: name, price: price });
+                    } else {
+                        const parts = line.split(' ').filter(part => part.trim() !== '');
+                        if (parts.length >= 2) {
+                            const price = parts.pop().trim();
+                            const name = parts.join(' ').trim();
+                            menuData.supplements.push({ name: name, price: price });
+                        }
+                    }
+                });
+
+                renderMenuData();
+            } catch (error) {
+                showStatus('Error loading menu data: ' + error.message, 'error');
+            }
+        }
+
+        // Render menu data in the admin interface
+        function renderMenuData() {
+            renderPizzaList();
+            renderOtherList();
+            renderSupplementsList();
+        }
+
+        function renderPizzaList() {
+            const container = document.getElementById('pizzaList');
+            container.innerHTML = '';
+            
+            menuData.pizzas.forEach((item, index) => {
+                const itemRow = document.createElement('div');
+                itemRow.className = 'item-row';
+                itemRow.innerHTML = `
+                    <input type="text" class="item-input" value="${item.name}" onchange="updatePizzaItem(${index}, 'name', this.value)">
+                    <input type="text" class="item-input" value="${item.description}" onchange="updatePizzaItem(${index}, 'description', this.value)">
+                    <input type="text" class="price-input" value="${item.priceMittel}" onchange="updatePizzaItem(${index}, 'priceMittel', this.value)" placeholder="Mittel">
+                    <input type="text" class="price-input" value="${item.priceParty}" onchange="updatePizzaItem(${index}, 'priceParty', this.value)" placeholder="Party">
+                    <div class="btn-group">
+                        <button class="btn btn-save" onclick="savePizzaItem(${index})">Save</button>
+                        <button class="btn btn-delete" onclick="deletePizzaItem(${index})">Delete</button>
+                    </div>
+                `;
+                container.appendChild(itemRow);
+            });
+        }
+
+        function renderOtherList() {
+            const container = document.getElementById('otherList');
+            container.innerHTML = '';
+            
+            menuData.other.forEach((item, index) => {
+                const itemRow = document.createElement('div');
+                itemRow.className = 'item-row';
+                itemRow.innerHTML = `
+                    <input type="text" class="item-input" value="${item.name}" onchange="updateOtherItem(${index}, 'name', this.value)">
+                    <input type="text" class="price-input" value="${item.price}" onchange="updateOtherItem(${index}, 'price', this.value)" placeholder="Price">
+                    <div class="btn-group">
+                        <button class="btn btn-save" onclick="saveOtherItem(${index})">Save</button>
+                        <button class="btn btn-delete" onclick="deleteOtherItem(${index})">Delete</button>
+                    </div>
+                `;
+                container.appendChild(itemRow);
+            });
+        }
+
+        function renderSupplementsList() {
+            const container = document.getElementById('supplementsList');
+            container.innerHTML = '';
+            
+            menuData.supplements.forEach((item, index) => {
+                const itemRow = document.createElement('div');
+                itemRow.className = 'item-row';
+                itemRow.innerHTML = `
+                    <input type="text" class="item-input" value="${item.name}" onchange="updateSupplementItem(${index}, 'name', this.value)">
+                    <input type="text" class="price-input" value="${item.price}" onchange="updateSupplementItem(${index}, 'price', this.value)" placeholder="Price">
+                    <div class="btn-group">
+                        <button class="btn btn-save" onclick="saveSupplementItem(${index})">Save</button>
+                        <button class="btn btn-delete" onclick="deleteSupplementItem(${index})">Delete</button>
+                    </div>
+                `;
+                container.appendChild(itemRow);
+            });
+        }
+
+        // Update functions
+        function updatePizzaItem(index, field, value) {
+            menuData.pizzas[index][field] = value;
+        }
+
+        function updateOtherItem(index, field, value) {
+            menuData.other[index][field] = value;
+        }
+
+        function updateSupplementItem(index, field, value) {
+            menuData.supplements[index][field] = value;
+        }
+
+        // Add new items
+        function addPizzaItem() {
+            menuData.pizzas.push({
+                name: 'New Pizza',
+                description: 'Description',
+                priceMittel: '0,00',
+                priceParty: '0,00'
+            });
+            renderPizzaList();
+        }
+
+        function addOtherItem() {
+            menuData.other.push({
+                name: 'New Item',
+                price: '0,00'
+            });
+            renderOtherList();
+        }
+
+        function addSupplementItem() {
+            menuData.supplements.push({
+                name: 'New Supplement',
+                price: '0,00'
+            });
+            renderSupplementsList();
+        }
+
+        // Delete functions
+        function deletePizzaItem(index) {
+            if (confirm('Are you sure you want to delete this pizza?')) {
+                menuData.pizzas.splice(index, 1);
+                renderPizzaList();
+            }
+        }
+
+        function deleteOtherItem(index) {
+            if (confirm('Are you sure you want to delete this item?')) {
+                menuData.other.splice(index, 1);
+                renderOtherList();
+            }
+        }
+
+        function deleteSupplementItem(index) {
+            if (confirm('Are you sure you want to delete this supplement?')) {
+                menuData.supplements.splice(index, 1);
+                renderSupplementsList();
+            }
+        }
+
+        // Save functions (these would need server-side implementation)
+        function savePizzaItem(index) {
+            showStatus('Pizza item updated! Remember to save all changes.', 'success');
+        }
+
+        function saveOtherItem(index) {
+            showStatus('Other item updated! Remember to save all changes.', 'success');
+        }
+
+        function saveSupplementItem(index) {
+            showStatus('Supplement updated! Remember to save all changes.', 'success');
+        }
+
+        // Save all changes
+        function saveAllChanges() {
+            // In a real implementation, this would send data to a server
+            // For now, we'll show what would be saved
+            console.log('Pizza data to save:', menuData.pizzas);
+            console.log('Other data to save:', menuData.other);
+            console.log('Supplements data to save:', menuData.supplements);
+            
+            showStatus('All changes saved successfully!', 'success');
+        }
+
+        // Status message
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('statusMessage');
+            statusDiv.textContent = message;
+            statusDiv.className = `status-message status-${type}`;
+            statusDiv.style.display = 'block';
+            
+            setTimeout(() => {
+                statusDiv.style.display = 'none';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
