@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel - Schwenksaal Pizza</title>
-    <link rel="icon" type="image/png" href="../resources/pizza_1.jpg">
+    <link rel="icon" type="image/png" href="../resources/pics/pizza_1.jpg">
     <style>
         * {
             margin: 0;
@@ -286,6 +287,7 @@
         }
     </style>
 </head>
+
 <body>
     <!-- Login Form -->
     <div class="login-container" id="loginContainer">
@@ -342,7 +344,7 @@
     <script>
         // Simple password protection (in production, use proper authentication)
         const ADMIN_PASSWORD = 'pizza2025';
-        
+
         let menuData = {
             pizzas: [],
             other: [],
@@ -350,10 +352,10 @@
         };
 
         // Login functionality
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
+        document.getElementById('loginForm').addEventListener('submit', function (e) {
             e.preventDefault();
             const password = document.getElementById('password').value;
-            
+
             if (password === ADMIN_PASSWORD) {
                 document.getElementById('loginContainer').style.display = 'none';
                 document.getElementById('adminPanel').style.display = 'block';
@@ -376,21 +378,21 @@
         async function loadMenuData() {
             try {
                 // Load pizzas
-                const pizzaResponse = await fetch('../resources/pizza_menu.txt');
+                const pizzaResponse = await fetch('../resources/data/pizza_menu.txt');
                 const pizzaText = await pizzaResponse.text();
                 const pizzaLines = pizzaText.split('\n').filter(line => line.trim() !== '');
-                
+
                 menuData.pizzas = [];
                 for (let i = 0; i < pizzaLines.length; i += 2) {
                     const firstLine = pizzaLines[i].trim();
                     const description = pizzaLines[i + 1] ? pizzaLines[i + 1].trim() : '';
-                    
+
                     const tokens = firstLine.split(' ').filter(token => token.trim() !== '');
                     if (tokens.length >= 3) {
                         const priceParty = tokens.pop();
                         const priceMittel = tokens.pop();
                         const name = tokens.join(' ');
-                        
+
                         menuData.pizzas.push({
                             name: name,
                             description: description,
@@ -401,10 +403,10 @@
                 }
 
                 // Load other items
-                const otherResponse = await fetch('../resources/other_menu.txt');
+                const otherResponse = await fetch('../resources/data/other_menu.txt');
                 const otherText = await otherResponse.text();
                 const otherLines = otherText.split('\n').filter(line => line.trim() !== '');
-                
+
                 menuData.other = [];
                 otherLines.forEach(line => {
                     line = line.trim();
@@ -417,10 +419,10 @@
                 });
 
                 // Load supplements
-                const supplementsResponse = await fetch('../resources/supplements_menu.txt');
+                const supplementsResponse = await fetch('../resources/data/supplements_menu.txt');
                 const supplementsText = await supplementsResponse.text();
                 const supplementsLines = supplementsText.split('\n').filter(line => line.trim() !== '');
-                
+
                 menuData.supplements = [];
                 supplementsLines.forEach(line => {
                     line = line.trim();
@@ -455,7 +457,7 @@
         function renderPizzaList() {
             const container = document.getElementById('pizzaList');
             container.innerHTML = '';
-            
+
             menuData.pizzas.forEach((item, index) => {
                 const itemRow = document.createElement('div');
                 itemRow.className = 'item-row';
@@ -476,7 +478,7 @@
         function renderOtherList() {
             const container = document.getElementById('otherList');
             container.innerHTML = '';
-            
+
             menuData.other.forEach((item, index) => {
                 const itemRow = document.createElement('div');
                 itemRow.className = 'item-row';
@@ -495,7 +497,7 @@
         function renderSupplementsList() {
             const container = document.getElementById('supplementsList');
             container.innerHTML = '';
-            
+
             menuData.supplements.forEach((item, index) => {
                 const itemRow = document.createElement('div');
                 itemRow.className = 'item-row';
@@ -593,7 +595,7 @@
             console.log('Pizza data to save:', menuData.pizzas);
             console.log('Other data to save:', menuData.other);
             console.log('Supplements data to save:', menuData.supplements);
-            
+
             showStatus('All changes saved successfully!', 'success');
         }
 
@@ -603,11 +605,12 @@
             statusDiv.textContent = message;
             statusDiv.className = `status-message status-${type}`;
             statusDiv.style.display = 'block';
-            
+
             setTimeout(() => {
                 statusDiv.style.display = 'none';
             }, 3000);
         }
     </script>
 </body>
+
 </html>

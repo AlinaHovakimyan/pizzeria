@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/png" href="../resources/pizza_1.jpg">
+  <link rel="icon" type="image/png" href="../resources/pics/pizza_1.jpg">
   <title>Menu - Schwenksaal Pizza</title>
   <style>
     * {
@@ -21,7 +21,7 @@
 
     /* Header Styles */
     .header {
-      background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('../resources/pizzeria_header.jpg');
+      background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('../resources/pics/pizzeria_header.jpg');
       background-size: cover;
       background-position: center;
       height: 60vh;
@@ -452,7 +452,7 @@
     <section class="section">
       <div class="menu-section">
         <div class="menu-intro">
-          <img src="../resources/pizza_1.jpg" alt="Pizza" class="pizza-image">
+          <img src="../resources/pics/pizza_1.jpg" alt="Pizza" class="pizza-image">
           <div class="menu-intro-content">
             <h2>Unsere Pizzen</h2>
             <p>Frisch zubereitet mit besten Zutaten</p>
@@ -483,7 +483,7 @@
     <section class="section">
       <div class="menu-section">
         <div class="menu-intro">
-          <img src="../resources/coffe.png" alt="Coffee" class="pizza-image">
+          <img src="../resources/pics/coffe.png" alt="Coffee" class="pizza-image">
           <div class="menu-intro-content">
             <h2>Weitere Angebote</h2>
             <p>Zusätzliche Leckereien</p>
@@ -516,7 +516,7 @@
 
   <script>
     // Fetch the menu data from the text file
-    fetch('../resources/pizza_menu.txt')
+    fetch('../resources/data/pizza_menu.txt')
       .then(response => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -579,7 +579,7 @@
       });
 
     // Load other menu items
-    fetch('../resources/other_menu.txt')
+    fetch('../resources/data/other_menu.txt')
       .then(response => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -622,7 +622,7 @@
       });
 
     // Load supplements menu
-    fetch('../resources/supplements_menu.txt')
+    fetch('../resources/data/supplements_menu.txt')
       .then(response => {
         if (!response.ok) {
           throw new Error('Network response was not ok');

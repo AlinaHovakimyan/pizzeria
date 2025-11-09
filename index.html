@@ -14,7 +14,7 @@
     <meta property="og:type" content="website">
 
     <link rel="canonical" href="https://www.scwenksaalpizza.de/">
-    <link rel="icon" type="image/png" href="resources/pizza_1.jpg">
+    <link rel="icon" type="image/png" href="resources/pics/pizza_1.jpg">
     <title>Schwenksaal Pizza - Authentic Italian Pizzeria</title>
     <style>
         * {
@@ -32,7 +32,7 @@
 
         /* Header Styles */
         .header {
-            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('resources/pizzeria_header.jpg');
+            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('resources/pics/pizzeria_header.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -439,7 +439,7 @@
                     <br>
                     <p>Whether you're joining us for a casual lunch, a romantic dinner, or a family celebration, we're committed to providing you with an unforgettable dining experience that captures the true spirit of Italian hospitality.</p>
                 </div>
-                <img src="resources/pizzeria.jpg" alt="Our Pizzeria Interior" class="about-image">
+                <img src="resources/pics/pizzeria.jpg" alt="Our Pizzeria Interior" class="about-image">
             </div>
         </section>
 
@@ -498,7 +498,7 @@
 
     <script>
         // Load menu preview
-        fetch('resources/pizza_menu.txt')
+        fetch('resources/data/pizza_menu.txt')
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -524,7 +524,7 @@
 
                     // Use different pizza images for variety
                     const imageIndex = (i / 2) % 3 + 1;
-                    const imageSrc = `resources/pizza_${imageIndex}.jpg`;
+                    const imageSrc = `resources/pics/pizza_${imageIndex}.jpg`;
 
                     htmlContent += `
                         <div class="menu-item">

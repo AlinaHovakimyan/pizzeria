@@ -25,7 +25,7 @@ function generateMenuHTML(menuText) {
 }
 
 // Read the menu.txt file
-fs.readFile('../resources/pizza_menu.txt', 'utf8', (err, data) => {
+fs.readFile('../resources/data/pizza_menu.txt', 'utf8', (err, data) => {
     if (err) {
         console.error('Error reading the menu file:', err);
         return;
